@@ -1,5 +1,5 @@
 from sqlalchemy.orm import declarative_base, relationship
-from sqlalchemy import Column, Integer, String, Numeric, UniqueConstraint
+from sqlalchemy import Column, Integer, String, Numeric
 from sqlalchemy.sql.schema import ForeignKey, Table
 
 Base = declarative_base()
@@ -92,3 +92,6 @@ class RedditMeta(Base):
     url = Column(String)
 
     media = relationship("Media", secondary=media_meta, back_populates="posts")
+
+    def full_permalink(self) -> str:
+        return f'https://old.reddit.com{self.permalink}'
