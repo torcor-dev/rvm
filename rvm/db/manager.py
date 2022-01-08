@@ -7,8 +7,8 @@ from pathlib import Path
 from sqlalchemy import create_engine
 
 
-from db.models import Media, RedditMeta, Subreddit, Tag
-from db.query_builder import QueryBuilder
+from rvm.db.models import Media, RedditMeta, Subreddit, Tag
+from rvm.db.query_builder import QueryBuilder
 
 class Manager:
     def __init__(self) -> None:

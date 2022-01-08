@@ -1,7 +1,7 @@
 import click
 from tabulate import tabulate
 
-from db.manager import Manager, TagManager, Filters
+from rvm.db.manager import Manager, TagManager, Filters
 
 @click.group()
 def cli():
