@@ -40,7 +40,7 @@ def tags(list, tag_subs, untag_subs, untagged_subs, sub_tags, tagged_subs):
         if not result:
             click.echo(f'No subreddit found with tag {tag}', err=True)
         else:
-            click.echo(tabulate_result(result, f'Subreddits with {tag}'))
+            click.echo(tabulate_result(result, f'Subreddits tagged with "{tag}"'))
     if sub_tags:
         sub = sub_tags.lower().strip()
         result = manager.list_sub_tags(sub)
