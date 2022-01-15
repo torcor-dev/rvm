@@ -214,6 +214,7 @@ class Filters:
 
     LANDSCAPE = lambda x: x > 1.2
     PORTRAIT = lambda x: x < 0.8
+    APPROX_RATIO = lambda x: lambda y: func.abs(y - x) < 0.12
     NO_COMIC_STRIPS = lambda x: x > 0.4
     HIGH_RES = lambda x, y: x * y > 1600 * 1200
     ABSURD_RES = lambda x, y: x * y > 3200 * 2400 

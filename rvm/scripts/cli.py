@@ -56,6 +56,7 @@ def tags(list, tag_subs, untag_subs, untagged_subs, sub_tags, tagged_subs):
 @click.option('--title', help='include media from posts containing word or phrase in the title')
 @click.option('--landscape', is_flag=True, help='only include wide media')
 @click.option('--portrait', is_flag=True, help='only include tall media')
+@click.option('--aspect-ratio', type=str, help='approximate aspect ratio eg "21x9"')
 @click.option('--high-res', is_flag=True, help='only include media with high (1600x1200+) resolution')
 @click.option('--absurd-res', is_flag=True, help='only include media with very high (3200x2400+) resolution')
 @click.option('--no-strips', is_flag=True, help='exclude very tall and slim media - typically comic strips')
@@ -74,7 +75,7 @@ def tags(list, tag_subs, untag_subs, untagged_subs, sub_tags, tagged_subs):
 @click.option('--debug', is_flag=True, help='shows count of results of query, and raw SQL')
 @click.option('--videos/--no-videos', default=False, help='\b\ninclude or exclude videos\n[Default: --no-videos]')
 @click.option('--formats', help=f'\b\ninclude files of the listed formats\nuse "--formats {Filters.ALL_FORMATS}" to include every file type')
-def list(title, landscape, portrait, high_res, absurd_res, no_strips, age, root, score, tags, exclude_tags, subreddits, exclude_subreddits, debug, videos, formats):
+def list(title, landscape, portrait, high_res, absurd_res, no_strips, age, root, score, tags, exclude_tags, subreddits, exclude_subreddits, debug, videos, formats, aspect_ratio):
     manager = Manager()
     manager.new_query()
     
@@ -86,6 +87,10 @@ def list(title, landscape, portrait, high_res, absurd_res, no_strips, age, root,
         manager.add_query_filter(Filters.ASPECT_RATIO, Filters.LANDSCAPE)
     if portrait:
         manager.add_query_filter(Filters.ASPECT_RATIO, Filters.PORTRAIT)
+    if aspect_ratio:
+        x, y = aspect_ratio.strip().split('x')
+        ratio = float(x) / float(y)
+        manager.add_query_filter(Filters.ASPECT_RATIO, Filters.APPROX_RATIO(ratio)) 
     if no_strips:
         manager.add_query_filter(Filters.ASPECT_RATIO, Filters.NO_COMIC_STRIPS)
     if high_res:
