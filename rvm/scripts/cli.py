@@ -56,7 +56,7 @@ def tags(list, tag_subs, untag_subs, untagged_subs, sub_tags, tagged_subs):
 @click.option('--title', help='include media from posts containing word or phrase in the title')
 @click.option('--landscape', is_flag=True, help='only include wide media')
 @click.option('--portrait', is_flag=True, help='only include tall media')
-@click.option('--aspect-ratio', type=str, help='approximate aspect ratio eg "21x9"')
+@click.option('--aspect-ratio', type=str, help='exact aspect ratio eg "21x9" or approximate aspect ratio by specifying how large deviations to include eg "21x9 0.12"')
 @click.option('--high-res', is_flag=True, help='only include media with high (1600x1200+) resolution')
 @click.option('--absurd-res', is_flag=True, help='only include media with very high (3200x2400+) resolution')
 @click.option('--no-strips', is_flag=True, help='exclude very tall and slim media - typically comic strips')
@@ -89,8 +89,13 @@ def list(title, landscape, portrait, high_res, absurd_res, no_strips, age, root,
         manager.add_query_filter(Filters.ASPECT_RATIO, Filters.PORTRAIT)
     if aspect_ratio:
         x, y = aspect_ratio.strip().split('x')
+        deviation = y.split(" ")
+        dev = 0.0
+        if len(deviation) > 1:
+            y, dev = deviation
+            dev = float(dev)
         ratio = float(x) / float(y)
-        manager.add_query_filter(Filters.ASPECT_RATIO, Filters.APPROX_RATIO(ratio)) 
+        manager.add_query_filter(Filters.ASPECT_RATIO, Filters.APPROX_RATIO(ratio, dev)) 
     if no_strips:
         manager.add_query_filter(Filters.ASPECT_RATIO, Filters.NO_COMIC_STRIPS)
     if high_res:
