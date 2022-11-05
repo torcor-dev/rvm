@@ -74,8 +74,9 @@ def tags(list, tag_subs, untag_subs, untagged_subs, sub_tags, tagged_subs):
 @click.option('--exclude-subreddits', help='exclude media from subreddits')
 @click.option('--debug', is_flag=True, help='shows count of results of query, and raw SQL')
 @click.option('--videos/--no-videos', default=False, help='\b\ninclude or exclude videos\n[Default: --no-videos]')
+@click.option('--min-duration', type=int, help=f'minimum duration of video in seconds')
 @click.option('--formats', help=f'\b\ninclude files of the listed formats\nuse "--formats {Filters.ALL_FORMATS}" to include every file type')
-def list(title, landscape, portrait, high_res, absurd_res, no_strips, age, root, score, tags, exclude_tags, subreddits, exclude_subreddits, debug, videos, formats, aspect_ratio):
+def list(title, landscape, portrait, high_res, absurd_res, no_strips, age, root, score, tags, exclude_tags, subreddits, exclude_subreddits, debug, videos, formats, aspect_ratio, min_duration):
     manager = Manager()
     manager.new_query()
     
@@ -125,6 +126,8 @@ def list(title, landscape, portrait, high_res, absurd_res, no_strips, age, root,
             manager.add_query_filter(Filters.FORMATS, formats)
     elif videos:
         manager.add_query_filter(Filters.FORMATS, Filters.VIDEOS)
+        if min_duration:
+            manager.add_query_filter(Filters.MIN_DURATION, min_duration)
     else:
         manager.add_query_filter(Filters.FORMATS, Filters.IMAGES)
 

@@ -3,6 +3,7 @@ class QueryBuilder:
         self.session = session
         self.models = []
         self.joins = []
+        self.outer_joins = []
         self.filters = []
         self.orders = []
         self.groups = []
@@ -13,6 +14,9 @@ class QueryBuilder:
 
     def add_join(self, join) -> None:
         self.joins.append(join)
+
+    def add_outer_join(self, join) -> None:
+        self.outer_joins.append(join)
 
     def add_filter(self, filter) -> None:
         self.filters.append(filter)
@@ -34,6 +38,8 @@ class QueryBuilder:
 
         for join in self.joins:
             query = query.join(join)
+        for join in self.outer_joins:
+            query = query.outerjoin(join)
         for filter in self.filters:
             query = query.filter(filter)
 
